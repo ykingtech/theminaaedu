@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVidShare - Educational Video Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/platform.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold" id="home-link">EduVidShare</a>
+            <div class="space-x-2">
+                <button id="admin-login-btn" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded">Admin Login</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4">
+        <div id="admin-login-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 class="text-xl font-bold mb-4">Admin Login</h2>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Username</label>
+                    <input id="admin-username" type="text" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Password</label>
+                    <input id="admin-password" type="password" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button id="admin-cancel-btn" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancel</button>
+                    <button id="admin-submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Login</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="category-edit-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 class="text-xl font-bold mb-4">Edit Category</h2>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Category Name</label>
+                    <input id="edit-category-name" type="text" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Category Thumbnail</label>
+                    <input id="edit-category-thumbnail" type="file" accept="image/*" class="w-full border border-gray-300 p-2 rounded">
+                    <div id="current-thumbnail-preview" class="mt-2 flex items-center">
+                        <img src="" alt="Current thumbnail" class="h-16 w-16 object-cover rounded hidden">
+                        <span class="text-sm text-gray-500 ml-2">No thumbnail set</span>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-2">
+                    <button id="category-edit-cancel-btn" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancel</button>
+                    <button id="category-edit-save-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="user-interface" class="mb-8">
+            <h1 class="text-3xl font-bold text-center my-8">Educational Videos</h1>
+
+            <div id="categories-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                </div>
+
+            <div id="videos-container" class="hidden">
+                <button id="back-to-categories" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                    ← Back to Categories
+                </button>
+                <h2 id="category-title" class="text-2xl font-bold mb-4"></h2>
+                <div id="videos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+            </div>
+
+            <div id="video-player-container" class="hidden">
+                <button id="back-to-videos" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+                    ← Back to Videos
+                </button>
+                <h2 id="video-title" class="text-2xl font-bold mb-4"></h2>
+                <div class="aspect-w-16 aspect-h-9 mb-4">
+                    <div id="video-player" class="w-full h-96 bg-black"></div>
+                </div>
+                <div id="video-description" class="bg-white p-4 rounded shadow mb-4"></div>
+            </div>
+        </div>
+
+        <div id="admin-interface" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+                <button id="admin-logout-btn" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Logout</button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+                <h2 class="text-xl font-bold mb-4">Manage Categories</h2>
+                <div class="flex flex-wrap gap-4 mb-4" id="admin-categories-list">
+                    </div>
+                <div class="flex gap-2 items-end">
+                    <div class="flex-grow">
+                        <input type="text" id="new-category-input" placeholder="New category name" class="border border-gray-300 p-2 rounded w-full mb-2">
+                        <div class="flex items-center">
+                            <label class="text-gray-700 mr-2">Thumbnail:</label>
+                            <input type="file" id="new-category-thumbnail" accept="image/*" class="text-sm w-full">
+                        </div>
+                    </div>
+                    <button id="add-category-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Add Category</button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Add YouTube Video</h2>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Video Title</label>
+                    <input id="video-title-input" type="text" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Video Description</label>
+                    <textarea id="video-description-input" class="w-full border border-gray-300 p-2 rounded h-32"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Category</label>
+                    <select id="video-category-select" class="w-full border border-gray-300 p-2 rounded">
+                        </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">YouTube Video URL or Embed Code</label>
+                    <textarea id="youtube-url-input" class="w-full border border-gray-300 p-2 rounded h-24"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Thumbnail Image (optional)</label>
+                    <input id="thumbnail-file-input" type="file" accept="image/*" class="w-full border border-gray-300 p-2 rounded">
+                </div>
+                <button id="upload-video-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Add Video</button>
+                <div id="upload-progress" class="mt-4 hidden">
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="upload-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="upload-status" class="text-sm text-gray-600 mt-2"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock database - In a real application, this would be stored in Google Drive
+        const DB = {
+            categories: [
+                { id: 'math', name: 'Mathematics', thumbnailUrl: '/api/placeholder/320/180' },
+                { id: 'science', name: 'Science', thumbnailUrl: '/api/placeholder/320/180' },
+                { id: 'history', name: 'History', thumbnailUrl: '/api/placeholder/320/180' }
+            ],
+            videos: [
+                {
+                    id: 'v1',
+                    title: 'Introduction to Algebra',
+                    description: 'Learn the basics of algebra in this comprehensive introduction.',
+                    category: 'math',
+                    videoUrl: 'https://www.youtube.com/embed/rFvtVLJeneM', // Example YouTube embed URL
+                    thumbnailUrl: '/api/placeholder/320/180'
+                },
+                {
+                    id: 'v2',
+                    title: 'Chemistry Fundamentals',
+                    description: 'Understand the key principles of chemistry with this beginner-friendly tutorial.',
+                    category: 'science',
+                    videoUrl: 'https://www.youtube.com/embed/Mg99HSrS-jY', // Example YouTube embed URL
+                    thumbnailUrl: '/api/placeholder/320/180'
+                },
+                {
+                    id: 'v3',
+                    title: 'World War II Overview',
+                    description: 'A comprehensive look at the causes and effects of World War II.',
+                    category: 'history',
+                    videoUrl: 'https://www.youtube.com/embed/PE4OEH0fUDg', // Example YouTube embed URL
+                    thumbnailUrl: '/api/placeholder/320/180'
+                }
+            ]
+        };
+
+        // Google Drive API setup - This would be implemented with actual API keys in a real application
+        function initGoogleDriveAPI() {
+            console.log('Google Drive API would be initialized here');
+            // In a real implementation:
+            // gapi.client.init({
+            //     apiKey: 'YOUR_API_KEY',
+            //     clientId: 'YOUR_CLIENT_ID',
+            //     discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+            //     scope: 'https://www.googleapis.com/auth/drive.file'
+            // });
+        }
+
+        // DOM elements
+        const elements = {
+            adminLoginBtn: document.getElementById('admin-login-btn'),
+            adminLoginModal: document.getElementById('admin-login-modal'),
+            adminCancelBtn: document.getElementById('admin-cancel-btn'),
+            adminSubmitBtn: document.getElementById('admin-submit-btn'),
+            adminUsername: document.getElementById('admin-username'),
+            adminPassword: document.getElementById('admin-password'),
+            adminInterface: document.getElementById('admin-interface'),
+            userInterface: document.getElementById('user-interface'),
+            adminLogoutBtn: document.getElementById('admin-logout-btn'),
+            categoriesContainer: document.getElementById('categories-container'),
+            videosContainer: document.getElementById('videos-container'),
+            videoPlayerContainer: document.getElementById('video-player-container'),
+            backToCategoriesBtn: document.getElementById('back-to-categories'),
+            backToVideosBtn: document.getElementById('back-to-videos'),
+            categoryTitle: document.getElementById('category-title'),
+            videosGrid: document.getElementById('videos-grid'),
+            videoPlayer: document.getElementById('video-player'),
+            videoTitle: document.getElementById('video-title'),
+            videoDescription: document.getElementById('video-description'),
+            adminCategoriesList: document.getElementById('admin-categories-list'),
+            newCategoryInput: document.getElementById('new-category-input'),
+            newCategoryThumbnail: document.getElementById('new-category-thumbnail'),
+            addCategoryBtn: document.getElementById('add-category-btn'),
+            videoCategorySelect: document.getElementById('video-category-select'),
+            videoTitleInput: document.getElementById('video-title-input'),
+            videoDescriptionInput: document.getElementById('video-description-input'),
+            youtubeUrlInput: document.getElementById('youtube-url-input'), // New element
+            thumbnailFileInput: document.getElementById('thumbnail-file-input'),
+            uploadVideoBtn: document.getElementById('upload-video-btn'),
+            uploadProgress: document.getElementById('upload-progress'),
+            uploadProgressBar: document.getElementById('upload-progress-bar'),
+            uploadStatus: document.getElementById('upload-status'),
+            homeLink: document.getElementById('home-link'),
+            categoryEditModal: document.getElementById('category-edit-modal'),
+            editCategoryName: document.getElementById('edit-category-name'),
+            editCategoryThumbnail: document.getElementById('edit-category-thumbnail'),
+            currentThumbnailPreview: document.getElementById('current-thumbnail-preview'),
+            categoryEditCancelBtn: document.getElementById('category-edit-cancel-btn'),
+            categoryEditSaveBtn: document.getElementById('category-edit-save-btn')
+        };
+
+        // Current editing category
+        let currentEditingCategory = null;
+
+        // Event Listeners
+        elements.adminLoginBtn.addEventListener('click', () => {
+            elements.adminLoginModal.classList.remove('hidden');
+        });
+
+        elements.adminCancelBtn.addEventListener('click', () => {
+            elements.adminLoginModal.classList.add('hidden');
+        });
+
+        elements.adminSubmitBtn.addEventListener('click', () => {
+            const username = elements.adminUsername.value;
+            const password = elements.adminPassword.value;
+
+            if (username === 'thekinaa' && password === '1116') {
+                elements.adminLoginModal.classList.add('hidden');
+                elements.userInterface.classList.add('hidden');
+                elements.adminInterface.classList.remove('hidden');
+                loadAdminInterface();
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+
+        elements.adminLogoutBtn.addEventListener('click', () => {
+            elements.adminInterface.classList.add('hidden');
+            elements.userInterface.classList.remove('hidden');
+            elements.videosContainer.classList.add('hidden');
+            elements.videoPlayerContainer.classList.add('hidden');
+            loadCategories();
+        });
+
+        elements.backToCategoriesBtn.addEventListener('click', () => {
+            elements.videosContainer.classList.add('hidden');
+            loadCategories();
+        });
+
+        elements.backToVideosBtn.addEventListener('click', () => {
+            elements.videoPlayerContainer.classList.add('hidden');
+            elements.videosContainer.classList.remove('hidden');
+        });
+
+        elements.addCategoryBtn.addEventListener
+('click', () => {
+            const categoryName = elements.newCategoryInput.value.trim();
+            if (categoryName) {
+                const categoryId = categoryName.toLowerCase().replace(/\s+/g, '-');
+
+                // Handle file upload (in a real app this would upload to Google Drive)
+                const thumbnailFile = elements.newCategoryThumbnail.files[0];
+                let thumbnailUrl = '/api/placeholder/320/180'; // Default placeholder
+
+                if (thumbnailFile) {
+                    // In a real app, this would be the URL after uploading to Google Drive
+                    // For this demo, we just use the placeholder
+                    console.log('Category thumbnail would be uploaded to Google Drive');
+                }
+
+                DB.categories.push({
+                    id: categoryId,
+                    name: categoryName,
+                    thumbnailUrl: thumbnailUrl
+                });
+
+                elements.newCategoryInput.value = '';
+                elements.newCategoryThumbnail.value = '';
+                loadAdminCategories();
+                updateCategorySelect();
+            }
+        });
+
+        elements.uploadVideoBtn.addEventListener('click', () => {
+            const title = elements.videoTitleInput.value.trim();
+            const description = elements.videoDescriptionInput.value.trim();
+            const category = elements.videoCategorySelect.value;
+            const youtubeUrl = elements.youtubeUrlInput.value.trim(); // Get YouTube URL
+            const thumbnailFile = elements.thumbnailFileInput.files[0];
+
+            if (!title || !category || !youtubeUrl) { // Check for YouTube URL
+                alert('Please fill in all required fields, including the YouTube Video URL or Embed Code');
+                return;
+            }
+
+            // Show upload progress (we can simplify this for URL input)
+            elements.uploadProgress.classList.remove('hidden');
+            elements.uploadStatus.textContent = 'Adding video...';
+
+            // Simulate adding video
+            setTimeout(() => {
+                const newVideo = {
+                    id: 'v' + (DB.videos.length + 1),
+                    title: title,
+                    description: description,
+                    category: category,
+                    videoUrl: youtubeUrl, // Save YouTube URL
+                    thumbnailUrl: '/api/placeholder/320/180' // Placeholder
+                };
+
+                DB.videos.push(newVideo);
+
+                elements.videoTitleInput.value = '';
+                elements.videoDescriptionInput.value = '';
+                elements.youtubeUrlInput.value = ''; // Clear YouTube URL field
+                elements.thumbnailFileInput.value = '';
+
+                elements.uploadProgress.classList.add('hidden');
+                elements.uploadProgressBar.style.width = '0%';
+                alert('Video added successfully!');
+            }, 1000);
+        });
+
+        elements.homeLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            elements.videosContainer.classList.add('hidden');
+            elements.videoPlayerContainer.classList.add('hidden');
+            loadCategories();
+        });
+
+        elements.categoryEditCancelBtn.addEventListener('click', () => {
+            elements.categoryEditModal.classList.add('hidden');
+            currentEditingCategory = null;
+        });
+
+        elements.categoryEditSaveBtn.addEventListener('click', () => {
+            if (!currentEditingCategory) return;
+
+            const newName = elements.editCategoryName.value.trim();
+            if (!newName) {
+                alert('Category name cannot be empty');
+                return;
+            }
+
+            // Find the category
+            const category = DB.categories.find(cat => cat.id === currentEditingCategory);
+            if (category) {
+                category.name = newName;
+
+                // Handle thumbnail update
+                const thumbnailFile = elements.editCategoryThumbnail.files[0];
+                if (thumbnailFile) {
+                    // In a real app, upload the file to Google Drive and update the URL
+                    // For this demo, we just simulate it
+                    console.log('Category thumbnail would be updated in Google Drive');
+                    // We keep the same placeholder URL
+                }
+
+                loadAdminCategories();
+                updateCategorySelect();
+                elements.categoryEditModal.classList.add('hidden');
+                currentEditingCategory = null;
+            }
+        });
+
+        // Functions
+        function loadCategories() {
+            elements.categoriesContainer.innerHTML = '';
+            elements.categoriesContainer.classList.remove('hidden');
+
+            DB.categories.forEach(category => {
+                const categoryCard = document.createElement('div');
+                categoryCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow';
+                categoryCard.innerHTML = `
+                    <div class="h-40 bg-blue-100 flex items-center justify-center overflow-hidden">
+                        <img src="${category.thumbnailUrl}" alt="${category.name}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-xl font-bold">${category.name}</h3>
+                        <p class="text-gray-600">${getVideoCountByCategory(category.id)} videos</p>
+                    </div>
+                `;
+
+                categoryCard.addEventListener('click', () => {
+                    loadVideosByCategory(category.id, category.name);
+                });
+
+                elements.categoriesContainer.appendChild(categoryCard);
+            });
+        }
+
+        function getVideoCountByCategory(categoryId) {
+            return DB.videos.filter(video => video.category === categoryId).length;
+        }
+
+        function loadVideosByCategory(categoryId, categoryName) {
+            elements.categoriesContainer.classList.add('hidden');
+            elements.videosContainer.classList.remove('hidden');
+            elements.categoryTitle.textContent = categoryName;
+
+            elements.videosGrid.innerHTML = '';
+
+            const videos = DB.videos.filter(video => video.category === categoryId);
+
+            videos.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow';
+                videoCard.innerHTML = `
+                    <div class="relative">
+                        <img src="${video.thumbnailUrl}" alt="${video.title}" class="w-full h-48 object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-lg font-bold">${video.title}</h3>
+                    </div>
+                `;
+
+                videoCard.addEventListener('click', () => {
+                    playVideo(video);
+                });
+
+                elements.videosGrid.appendChild(videoCard);
+            });
+        }
+
+        function playVideo(video) {
+            elements.videosContainer.classList.add('hidden');
+            elements.videoPlayerContainer.classList.remove('hidden');
+
+            elements.videoTitle.textContent = video.title;
+            elements.videoDescription.textContent = video.description;
+
+            // Function to get YouTube video ID from URL
+            function getYoutubeId(url) {
+                const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
+                const match = url.match(regExp);
+                return (match && match[2].length === 11) ? match[2] : null;
+            }
+
+            const youtubeId = getYoutubeId(video.videoUrl);
+            let videoEmbedCode = '';
+
+            if (youtubeId) {
+                videoEmbedCode = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${youtubeId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            } else if (video.videoUrl.includes('embed')) {
+                videoEmbedCode = video.videoUrl; // Assuming the user might paste the full embed code
+            } else {
+                videoEmbedCode = `<p>Invalid YouTube URL</p>`;
+            }
+
+            // Create video player
+            elements.videoPlayer.innerHTML = `
+                <div class="aspect-w-16 aspect-h-9">
+                    ${videoEmbedCode}
+                </div>
+            `;
+        }
+
+        function loadAdminInterface() {
+            loadAdminCategories();
+            updateCategorySelect();
+        }
+
+        function loadAdminCategories() {
+            elements.adminCategoriesList.innerHTML = '';
+
+            DB.categories.forEach(category => {
+                const categoryChip = document.createElement('div');
+                categoryChip.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center';
+                categoryChip.innerHTML = `
+                    <span>${category.name}</span>
+                    <div class="ml-2 flex">
+                        <button class="text-blue-500 hover:text-blue-700 mr-1 edit-btn" data-category-id="${category.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                            </svg>
+                        </button>
+                        <button class="text-red-500 hover:text-red-700 delete-btn" data-category-id="${category.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                const deleteBtn = categoryChip.querySelector('.delete-btn');
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const categoryId = deleteBtn.getAttribute('data-category-id');
+                    deleteCategory(categoryId);
+                });
+
+                const editBtn = categoryChip.querySelector('.edit-btn');
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const categoryId = editBtn.getAttribute('data-category-id');
+                    openCategoryEditModal(categoryId);
+                });
+
+                elements.adminCategoriesList.appendChild(categoryChip);
+            });
+        }
+
+        function openCategoryEditModal(categoryId) {
+            const category = DB.categories.find(cat => cat.id === categoryId);
+            if (!category) return;
+
+            currentEditingCategory = categoryId;
+            elements.editCategoryName.value = category.name;
+
+            // Update thumbnail preview
+            const previewImg = elements.currentThumbnailPreview.querySelector('img');
+            const previewText = elements.currentThumbnailPreview.querySelector('span');
+
+            if (category.thumbnailUrl) {
+                previewImg.src = category.thumbnailUrl;
+                previewImg.classList.remove('hidden');
+                previewText.textContent = 'Current thumbnail';
+            } else {
+                previewImg.classList.add('hidden');
+                previewText.textContent = 'No thumbnail set';
+            }
+
+            elements.categoryEditModal.classList.remove('hidden');
+        }
+
+        function deleteCategory(categoryId) {
+            // Remove category
+            DB.categories = DB.categories.filter(cat => cat.id !== categoryId);
+
+            // Update videos (in a real app, you might reassign or delete the videos)
+            DB.videos = DB.videos.filter(video => video.category !== categoryId);
+
+            // Refresh UI
+            loadAdminCategories();
+            updateCategorySelect();
+        }
+
+        function updateCategorySelect() {
+            elements.videoCategorySelect.innerHTML = '';
+
+            DB.categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.id;
+                option.textContent = category.name;
+                elements.videoCategorySelect.appendChild(option);
+            });
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            initGoogleDriveAPI();
+            loadCategories();
+        });
+    </script>
+</body>
+</html>
