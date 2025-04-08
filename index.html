@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="si"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduVidShare - Educational Video Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
+    <title>Thekinaa EDU </title> <script src="https://cdn.tailwindcss.com"></script>
+    </head>
 <body class="bg-gray-100 min-h-screen">
     <nav class="bg-blue-600 text-white p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold" id="home-link">EduVidShare</a>
+            <a href="#" class="text-2xl font-bold" id="home-link">Thekinaa EDU</a>
             <div class="space-x-2">
                 <button id="admin-login-btn" class="bg-blue-700 hover:bg-blue-800 px-4 py-2 rounded">Admin Login</button>
             </div>
@@ -22,14 +19,8 @@
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h2 class="text-xl font-bold mb-4">Admin Login</h2>
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">Username</label>
-                    <input id="admin-username" type="text" class="w-full border border-gray-300 p-2 rounded">
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">Password</label>
-                    <input id="admin-password" type="password" class="w-full border border-gray-300 p-2 rounded">
-                </div>
-                <div class="flex justify-end space-x-2">
+                    <label for="admin-code-input" class="block text-gray-700 mb-2">Admin Code</label> <input id="admin-code-input" type="password" class="w-full border border-gray-300 p-2 rounded"> </div>
+                <div id="admin-login-error" class="text-red-500 text-sm mb-4 hidden">Invalid Admin Code</div> <div class="flex justify-end space-x-2">
                     <button id="admin-cancel-btn" class="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Cancel</button>
                     <button id="admin-submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Login</button>
                 </div>
@@ -45,10 +36,10 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-gray-700 mb-2">Category Thumbnail URL</label>
-                    <input id="edit-category-thumbnail" type="text" class="w-full border border-gray-300 p-2 rounded">
-                    <div id="current-thumbnail-preview" class="mt-2 flex items-center">
-                        <img src="" alt="Current thumbnail" class="h-16 w-16 object-cover rounded hidden">
-                        <span class="text-sm text-gray-500 ml-2">No thumbnail set</span>
+                    <input id="edit-category-thumbnail" type="text" class="w-full border border-gray-300 p-2 rounded" placeholder="https://example.com/image.jpg">
+                     <div class="mt-2">
+                        <img id="edit-thumbnail-preview" src="" alt="Thumbnail preview" class="h-16 w-auto object-cover rounded hidden">
+                        <span id="edit-no-thumbnail-text" class="text-sm text-gray-500 hidden">No thumbnail set</span>
                     </div>
                 </div>
                 <div class="flex justify-end space-x-2">
@@ -59,10 +50,9 @@
         </div>
 
         <div id="user-interface" class="mb-8">
-            <h1 class="text-3xl font-bold text-center my-8">Educational Videos</h1>
-
-            <div id="categories-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                </div>
+            <h1 class="text-3xl font-bold text-center my-8"> </h1> <div id="categories-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <p class="text-gray-500 col-span-full text-center">Loading categories...</p>
+            </div>
 
             <div id="videos-container" class="hidden">
                 <button id="back-to-categories" class="mb-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
@@ -70,7 +60,8 @@
                 </button>
                 <h2 id="category-title" class="text-2xl font-bold mb-4"></h2>
                 <div id="videos-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    </div>
+                    <p class="text-gray-500 col-span-full text-center">Loading videos...</p>
+                </div>
             </div>
 
             <div id="video-player-container" class="hidden">
@@ -78,10 +69,12 @@
                     ← Back to Videos
                 </button>
                 <h2 id="video-title" class="text-2xl font-bold mb-4"></h2>
-                <div class="aspect-w-16 aspect-h-9 mb-4">
-                    <div id="video-player" class="w-full h-96 bg-black"></div>
+                <div class="relative mb-4" style="padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                     <div id="video-player" class="absolute top-0 left-0 w-full h-full bg-black">
+                         </div>
                 </div>
-                <div id="video-description" class="bg-white p-4 rounded shadow mb-4"></div>
+                <div id="video-description" class="bg-white p-4 rounded shadow mb-4">
+                     </div>
             </div>
         </div>
 
@@ -94,67 +87,77 @@
             <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
                 <h2 class="text-xl font-bold mb-4">Manage Categories</h2>
                 <div class="flex flex-wrap gap-4 mb-4" id="admin-categories-list">
-                    </div>
-                <div class="flex gap-2 items-end">
-                    <div class="flex-grow">
-                        <input type="text" id="new-category-input" placeholder="New category name" class="border border-gray-300 p-2 rounded w-full mb-2">
-                        <input type="text" id="new-category-thumbnail" placeholder="New category thumbnail URL" class="border border-gray-300 p-2 rounded w-full mb-2">
-                    </div>
-                    <button id="add-category-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Add Category</button>
+                    <p class="text-gray-500 w-full">Loading categories...</p>
                 </div>
-            </div>
+                <div class="flex flex-col sm:flex-row gap-2 items-end">
+                    <div class="flex-grow w-full sm:w-auto">
+                        <label for="new-category-input" class="sr-only">New Category Name</label>
+                        <input type="text" id="new-category-input" placeholder="New category name" class="border border-gray-300 p-2 rounded w-full mb-2 sm:mb-0">
+                    </div>
+                     <div class="flex-grow w-full sm:w-auto">
+                         <label for="new-category-thumbnail" class="sr-only">New Category Thumbnail URL</label>
+                         <input type="text" id="new-category-thumbnail" placeholder="Category thumbnail URL (optional)" class="border border-gray-300 p-2 rounded w-full mb-2 sm:mb-0">
+                     </div>
+                    <button id="add-category-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full sm:w-auto flex-shrink-0">Add Category</button>
+                </div>
+                 <div id="admin-category-message" class="text-sm mt-2"></div> </div>
 
             <div class="bg-white rounded-lg shadow-lg p-6">
                 <h2 class="text-xl font-bold mb-4">Add YouTube Video</h2>
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">Video Title</label>
+                    <label for="video-title-input" class="block text-gray-700 mb-2">Video Title</label>
                     <input id="video-title-input" type="text" class="w-full border border-gray-300 p-2 rounded">
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">Video Description</label>
+                    <label for="video-description-input" class="block text-gray-700 mb-2">Video Description</label>
                     <textarea id="video-description-input" class="w-full border border-gray-300 p-2 rounded h-32"></textarea>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">Category</label>
-                    <select id="video-category-select" class="w-full border border-gray-300 p-2 rounded">
-                        </select>
+                    <label for="video-category-select" class="block text-gray-700 mb-2">Category</label>
+                    <select id="video-category-select" class="w-full border border-gray-300 p-2 rounded bg-white">
+                         <option value="" disabled selected>Select Category</option>
+                         </select>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">YouTube Video URL or Embed Code</label>
-                    <textarea id="youtube-url-input" class="w-full border border-gray-300 p-2 rounded h-24"></textarea>
+                    <label for="youtube-url-input" class="block text-gray-700 mb-2">YouTube Video URL or Embed Code</label>
+                    <textarea id="youtube-url-input" placeholder="e.g., https://www.youtube.com/watch?v=VIDEO_ID or <iframe ...></iframe>" class="w-full border border-gray-300 p-2 rounded h-24"></textarea>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 mb-2">Thumbnail Image URL (optional)</label>
-                    <input id="thumbnail-url-input" type="text" class="w-full border border-gray-300 p-2 rounded">
+                    <label for="thumbnail-url-input" class="block text-gray-700 mb-2">Video Thumbnail URL (optional)</label>
+                    <input id="thumbnail-url-input" type="text" placeholder="Leave blank to attempt auto-fetch (if URL provided)" class="w-full border border-gray-300 p-2 rounded">
                 </div>
                 <button id="upload-video-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Add Video</button>
-                <div id="upload-progress" class="mt-4 hidden">
-                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                        <div id="upload-progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
-                    </div>
-                    <p id="upload-status" class="text-sm text-gray-600 mt-2"></p>
-                </div>
-            </div>
+                <div id="admin-video-message" class="text-sm mt-2"></div> </div>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxxaSZbxz7IrnMG3LQwCUHVrcM64K1xxRXRYS4WYst6mrQmVxdIeB52amAuGv5HwXiD/exechttps://script.google.com/macros/s/AKfycbxdd1sAcWQ-B2v9eV17crtv4YpU_tFDSyxDk8OEimyS83wYNPbwX8K6yjH_kdZsxIzJ/exec'; // ඔයාගේ Web App URL එක මෙතනට දාන්න
+        // --- Configuration ---
+        // !!! VERY IMPORTANT: Replace this URL with your actual Google Apps Script Web App URL !!!
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzh6FSY3hm1dQRoehWSzVmmT_dRhNXFI1SBpv_b1PK9AyOEtsZcJJaLYFHJVu1iTtG5/exec';
+        const ADMIN_ACCESS_CODE = 'thekinaa'; // !!! SECURITY RISK: Hardcoded Admin Code - DO NOT use in production !!!
 
-        // DOM elements
+        // --- DOM Elements ---
         const elements = {
+            // Admin Login
             adminLoginBtn: document.getElementById('admin-login-btn'),
             adminLoginModal: document.getElementById('admin-login-modal'),
             adminCancelBtn: document.getElementById('admin-cancel-btn'),
             adminSubmitBtn: document.getElementById('admin-submit-btn'),
-            adminUsername: document.getElementById('admin-username'),
-            adminPassword: document.getElementById('admin-password'),
+            adminCodeInput: document.getElementById('admin-code-input'), // Updated ID
+            adminLoginError: document.getElementById('admin-login-error'),
+
+            // Interfaces
             adminInterface: document.getElementById('admin-interface'),
             userInterface: document.getElementById('user-interface'),
             adminLogoutBtn: document.getElementById('admin-logout-btn'),
+
+            // User View Containers
             categoriesContainer: document.getElementById('categories-container'),
             videosContainer: document.getElementById('videos-container'),
             videoPlayerContainer: document.getElementById('video-player-container'),
+
+            // User View Navigation & Content
             backToCategoriesBtn: document.getElementById('back-to-categories'),
             backToVideosBtn: document.getElementById('back-to-videos'),
             categoryTitle: document.getElementById('category-title'),
@@ -162,268 +165,243 @@
             videoPlayer: document.getElementById('video-player'),
             videoTitle: document.getElementById('video-title'),
             videoDescription: document.getElementById('video-description'),
+            homeLink: document.getElementById('home-link'),
+
+            // Admin Category Management
             adminCategoriesList: document.getElementById('admin-categories-list'),
             newCategoryInput: document.getElementById('new-category-input'),
             newCategoryThumbnail: document.getElementById('new-category-thumbnail'),
             addCategoryBtn: document.getElementById('add-category-btn'),
+            adminCategoryMessage: document.getElementById('admin-category-message'),
+
+            // Admin Video Management
             videoCategorySelect: document.getElementById('video-category-select'),
             videoTitleInput: document.getElementById('video-title-input'),
             videoDescriptionInput: document.getElementById('video-description-input'),
             youtubeUrlInput: document.getElementById('youtube-url-input'),
             thumbnailUrlInput: document.getElementById('thumbnail-url-input'),
             uploadVideoBtn: document.getElementById('upload-video-btn'),
-            uploadProgress: document.getElementById('upload-progress'),
-            uploadProgressBar: document.getElementById('upload-progress-bar'),
-            uploadStatus: document.getElementById('upload-status'),
-            homeLink: document.getElementById('home-link'),
+            adminVideoMessage: document.getElementById('admin-video-message'),
+
+             // Category Edit Modal
             categoryEditModal: document.getElementById('category-edit-modal'),
             editCategoryName: document.getElementById('edit-category-name'),
             editCategoryThumbnail: document.getElementById('edit-category-thumbnail'),
-            currentThumbnailPreview: document.getElementById('current-thumbnail-preview'),
+            editThumbnailPreview: document.getElementById('edit-thumbnail-preview'),
+            editNoThumbnailText: document.getElementById('edit-no-thumbnail-text'),
             categoryEditCancelBtn: document.getElementById('category-edit-cancel-btn'),
             categoryEditSaveBtn: document.getElementById('category-edit-save-btn')
         };
 
-        let DB = { categories: [], videos: [] }; // Initialize empty DB
+        // --- State ---
+        let DB = { categories: [], videos: [] }; // Client-side cache
+        let currentEditingCategory = null; // ID of category being edited
+        let currentCategory = { id: null, name: null }; // Track currently viewed category for back navigation
 
-        // Current editing category ID
-        let currentEditingCategory = null;
-
-        // Event Listeners
-        elements.adminLoginBtn.addEventListener('click', () => {
-            elements.adminLoginModal.classList.remove('hidden');
-        });
-
-        elements.adminCancelBtn.addEventListener('click', () => {
-            elements.adminLoginModal.classList.add('hidden');
-        });
-
-        elements.adminSubmitBtn.addEventListener('click', () => {
-            const username = elements.adminUsername.value;
-            const password = elements.adminPassword.value;
-
-            if (username === 'thekinaa' && password === '1116') {
-                elements.adminLoginModal.classList.add('hidden');
-                elements.userInterface.classList.add('hidden');
-                elements.adminInterface.classList.remove('hidden');
-                loadAdminInterface();
-            } else {
-                alert('Invalid username or password');
-            }
-        });
-
-        elements.adminLogoutBtn.addEventListener('click', () => {
-            elements.adminInterface.classList.add('hidden');
-            elements.userInterface.classList.remove('hidden');
-            elements.videosContainer.classList.add('hidden');
-            elements.videoPlayerContainer.classList.add('hidden');
-            loadCategories();
-        });
-
-        elements.backToCategoriesBtn.addEventListener('click', () => {
-            elements.videosContainer.classList.add('hidden');
-            loadCategories();
-        });
-
-        elements.backToVideosBtn.addEventListener('click', () => {
-            elements.videoPlayerContainer.classList.add('hidden');
-            elements.videosContainer.classList.remove('hidden');
-        });
-
-        elements.addCategoryBtn.addEventListener('click', () => {
-            const categoryName = elements.newCategoryInput.value.trim();
-            const categoryId = categoryName.toLowerCase().replace(/\s+/g, '-');
-            const thumbnailUrl = elements.newCategoryThumbnail.value.trim() || '/api/placeholder/320/180'; // Default thumbnail
-
-            if (categoryName) {
-                fetch(`${API_URL}/addCategory`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: categoryId, name: categoryName, thumbnailUrl: thumbnailUrl })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        elements.newCategoryInput.value = '';
-                        elements.newCategoryThumbnail.value = '';
-                        loadAdminCategories();
-                        updateCategorySelect();
-                    } else {
-                        alert('Failed to add category: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error adding category:', error);
-                    alert('Error adding category.');
-                });
-            }
-        });
-
-        elements.uploadVideoBtn.addEventListener('click', () => {
-            const title = elements.videoTitleInput.value.trim();
-            const description = elements.videoDescriptionInput.value.trim();
-            const category = elements.videoCategorySelect.value;
-            const youtubeUrl = elements.youtubeUrlInput.value.trim();
-            const thumbnailUrl = elements.thumbnailUrlInput.value.trim() || '/api/placeholder/320/180';
-
-            if (title && category && youtubeUrl) {
-                const videoId = 'v' + (Date.now()); // Simple ID
-                fetch(`${API_URL}/addVideo`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ id: videoId, title: title, description: description, category: category, videoUrl: youtubeUrl, thumbnailUrl: thumbnailUrl })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        elements.videoTitleInput.value = '';
-                        elements.videoDescriptionInput.value = '';
-                        elements.youtubeUrlInput.value = '';
-                        elements.thumbnailUrlInput.value = '';
-                        alert('Video added successfully!');
-                        loadVideosByCategory(category, elements.videoCategorySelect.options[elements.videoCategorySelect.selectedIndex].textContent); // Refresh video list if visible
-                    } else {
-                        alert('Failed to add video: ' + data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error adding video:', error);
-                    alert('Error adding video.');
-                });
-            } else {
-                alert('Please fill in all required fields.');
-            }
-        });
-
-        elements.homeLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            elements.videosContainer.classList.add('hidden');
-            elements.videoPlayerContainer.classList.add('hidden');
-            loadCategories();
-        });
-
-        elements.categoryEditCancelBtn.addEventListener('click', () => {
-            elements.categoryEditModal.classList.add('hidden');
-            currentEditingCategory = null;
-        });
-
-        elements.categoryEditSaveBtn.addEventListener('click', () => {
-            if (!currentEditingCategory) return;
-
-            const newName = elements.editCategoryName.value.trim();
-            const newThumbnailUrl = elements.editCategoryThumbnail.value.trim();
-
-            if (!newName) {
-                alert('Category name cannot be empty');
-                return;
-            }
-
-            fetch(`${API_URL}/editCategory`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: currentEditingCategory, name: newName, thumbnailUrl: newThumbnailUrl })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadAdminCategories();
-                    updateCategorySelect();
-                    elements.categoryEditModal.classList.add('hidden');
-                    currentEditingCategory = null;
-                } else {
-                    alert('Failed to edit category: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error editing category:', error);
-                alert('Error editing category.');
-            });
-        });
-
-        function loadCategories() {
-            elements.categoriesContainer.innerHTML = '';
-            elements.categoriesContainer.classList.remove('hidden');
-
-            fetch(`${API_URL}/categories`)
-                .then(response => response.json())
-                .then(data => {
-                    DB.categories = data;
-                    DB.categories.forEach(category => {
-                        const categoryCard = document.createElement('div');
-                        categoryCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow';
-                        categoryCard.innerHTML = `
-                            <div class="h-40 bg-blue-100 flex items-center justify-center overflow-hidden">
-                                <img src="<span class="math-inline">\{category\.thumbnailUrl \|\| '/api/placeholder/320/180'\}" alt\="</span>{category.name}" class="w-full h-full object-cover">
-                            </div>
-                            <div class="p-4">
-                                <h3 class="text-xl font-bold"><span class="math-inline">\{category\.name\}</h3\>
-<p class\="text\-gray\-600"\></span>{getVideoCountByCategory(category.id)} videos</p>
-                            </div>
-                        `;
-
-                        categoryCard.addEventListener('click', () => {
-                            loadVideosByCategory(category.id, category.name);
-                        });
-
-                        elements.categoriesContainer.appendChild(categoryCard);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching categories:', error);
-                    elements.categoriesContainer.innerHTML = '<p class="text-red-500">Failed to load categories.</p>';
-                });
+        // --- Utility Functions ---
+        function showMessage(element, message, isError = false) {
+            element.textContent = message;
+            element.className = `text-sm mt-2 ${isError ? 'text-red-600' : 'text-green-600'}`;
+            setTimeout(() => { element.textContent = ''; }, 5000); // Clear message after 5 seconds
         }
 
-        function getVideoCountByCategory(categoryId) {
-            return DB.videos.filter(video => video.category === categoryId).length;
+        function getYoutubeId(url) {
+            // Handles various YouTube URL formats and extracts video ID
+            const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        function getYoutubeEmbedCode(urlOrCode) {
+            // Tries to extract ID for standard embed, otherwise assumes it's already an iframe code
+            const youtubeId = getYoutubeId(urlOrCode);
+            if (youtubeId) {
+                // Corrected embed URL
+                 return `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${youtubeId}?autoplay=0&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            } else if (urlOrCode.trim().toLowerCase().startsWith('<iframe')) {
+                 // Assume it's already a valid iframe code (basic check)
+                 return urlOrCode;
+            }
+            return null; // Invalid input
+        }
+
+        // --- API Call Functions ---
+        async function fetchData(endpoint) {
+             elements.categoriesContainer.innerHTML = '<p class="text-gray-500 col-span-full text-center">Loading...</p>'; // Show loading generally
+             elements.videosGrid.innerHTML = '<p class="text-gray-500 col-span-full text-center">Loading...</p>';
+            try {
+                const response = await fetch(`${API_URL}?action=${endpoint}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                 elements.categoriesContainer.innerHTML = ''; // Clear loading on success
+                 elements.videosGrid.innerHTML = '';
+                return data;
+            } catch (error) {
+                console.error(`Error fetching ${endpoint}:`, error);
+                // Show error more visibly
+                 elements.categoriesContainer.innerHTML = `<p class="text-red-500 col-span-full text-center">Error loading data: ${error.message}. Check API_URL and backend script.</p>`;
+                 elements.videosGrid.innerHTML = `<p class="text-red-500 col-span-full text-center">Error loading videos: ${error.message}.</p>`;
+                return null;
+            }
+        }
+
+         async function postData(action, payload) {
+            // Show generic processing message in admin panels
+             showMessage(elements.adminCategoryMessage, 'Processing...', false);
+             showMessage(elements.adminVideoMessage, 'Processing...', false);
+            try {
+               const response = await fetch(API_URL, {
+                method: 'POST',
+                // Added mode: 'no-cors' to bypass CORS preflight for simple POSTs
+                mode: 'no-cors',
+                // Keep headers and body - Apps Script doPost needs to handle JSON.stringify(payload) correctly.
+                // Note: We cannot easily check response status or body with 'no-cors'.
+                headers: {
+                   'Content-Type': 'application/json' // Keep this if your Apps Script expects JSON
+                },
+                body: JSON.stringify({ action: action, ...payload })
+            });
+
+                // Try to parse JSON, but handle potential text responses from Apps Script errors
+                let data;
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                     data = await response.json();
+                } else {
+                    const textResponse = await response.text();
+                    // Attempt to handle non-JSON success/error messages from GAS if needed
+                     console.warn("Received non-JSON response:", textResponse);
+                     // Assume success if response status is OK, otherwise throw error based on text
+                    if (!response.ok) throw new Error(textResponse || `HTTP error! status: ${response.status}`);
+                     // If response is ok but not JSON, create a generic success object
+                     data = { success: true, message: textResponse || "Operation likely succeeded (non-JSON response)." };
+                }
+
+                 if (!response.ok || data.status === 'error' || data.success === false) {
+                     throw new Error(data.message || data.error || 'Unknown error');
+                 }
+
+                 // Clear processing messages on success
+                 elements.adminCategoryMessage.textContent = '';
+                 elements.adminVideoMessage.textContent = '';
+                 return data; // Contains { success: true, ... }
+
+            } catch (error) {
+                console.error(`Error posting action ${action}:`, error);
+                // Show error in relevant admin panel
+                if (action.toLowerCase().includes('category')) {
+                    showMessage(elements.adminCategoryMessage, `Error: ${error.message}`, true);
+                } else if (action.toLowerCase().includes('video')) {
+                     showMessage(elements.adminVideoMessage, `Error: ${error.message}`, true);
+                 } else {
+                     alert(`Error performing action ${action}: ${error.message}`); // Fallback alert
+                 }
+                 return { success: false, error: error.message }; // Return error object
+            }
+        }
+
+
+        // --- UI Rendering Functions ---
+
+        function loadCategories() {
+            elements.categoriesContainer.classList.remove('hidden');
+             elements.videosContainer.classList.add('hidden');
+             elements.videoPlayerContainer.classList.add('hidden');
+             elements.categoriesContainer.innerHTML = '<p class="text-gray-500 col-span-full text-center">Loading categories...</p>'; // Loading indicator
+
+            fetchData('getCategories')
+                .then(data => {
+                     if (data && data.categories) {
+                        DB.categories = data.categories;
+                        DB.videos = data.videos || []; // Cache videos if backend sends them together
+                        elements.categoriesContainer.innerHTML = ''; // Clear loading/error
+
+                         if (DB.categories.length === 0) {
+                             elements.categoriesContainer.innerHTML = '<p class="text-gray-500 col-span-full text-center">No categories found. Add some via the Admin Panel.</p>';
+                             return;
+                         }
+
+                        DB.categories.forEach(category => {
+                            const categoryCard = document.createElement('div');
+                            categoryCard.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer';
+                             // Corrected template literal syntax and placeholder URL
+                            categoryCard.innerHTML = `
+                                <div class="h-40 bg-gray-200 flex items-center justify-center overflow-hidden">
+                                    <img src="${category.thumbnailUrl || 'https://placehold.co/320x180?text=' + encodeURIComponent(category.name)}" alt="${category.name}" class="w-full h-full object-cover">
+                                </div>
+                                <div class="p-4">
+                                    <h3 class="text-xl font-bold mb-1">${category.name}</h3>
+                                </div>
+                            `;
+                             // Removed video count for simplicity as it requires loading all videos initially
+
+                            categoryCard.addEventListener('click', () => {
+                                loadVideosByCategory(category.id, category.name);
+                            });
+                            elements.categoriesContainer.appendChild(categoryCard);
+                        });
+                     } else if (!data) {
+                         // Error message handled by fetchData
+                     } else {
+                         elements.categoriesContainer.innerHTML = '<p class="text-gray-500 col-span-full text-center">No categories found.</p>';
+                     }
+                });
         }
 
         function loadVideosByCategory(categoryId, categoryName) {
+            currentCategory = { id: categoryId, name: categoryName }; // Store for back navigation
             elements.categoriesContainer.classList.add('hidden');
             elements.videosContainer.classList.remove('hidden');
+            elements.videoPlayerContainer.classList.add('hidden'); // Hide player when viewing list
             elements.categoryTitle.textContent = categoryName;
-            elements.videosGrid.innerHTML = '';
+            elements.videosGrid.innerHTML = '<p class="text-gray-500 col-span-full text-center">Loading videos...</p>'; // Loading indicator
 
-            fetch(`<span class="math-inline">\{API\_URL\}/videos?category\=</span>{categoryId}`)
-                .then(response => response.json())
+            // Fetch videos specifically for this category
+             fetchData(`getVideos&category=${categoryId}`) // Pass category ID
                 .then(data => {
-                    DB.videos = data;
-                    const videos = DB.videos.filter(video => video.category === categoryId);
-                    videos.forEach(video => {
-                        const videoCard = document.createElement('div');
-                        videoCard.className = 'bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow';
-                        videoCard.innerHTML = `
-                            <div class="relative">
-                                <img src="<span class="math-inline">\{video\.thumbnailUrl \|\| '/api/placeholder/320/180'\}" alt\="</span>{video.title}" class="w-full h-48 object-cover">
-                                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                     if (data && data.videos) {
+                         DB.videos = data.videos; // Update video cache for this category
+                         elements.videosGrid.innerHTML = ''; // Clear loading/error
+
+                         if (DB.videos.length === 0) {
+                             elements.videosGrid.innerHTML = `<p class="text-gray-500 col-span-full text-center">No videos found in the '${categoryName}' category.</p>`;
+                             return;
+                         }
+
+                         DB.videos.forEach(video => {
+                            const videoCard = document.createElement('div');
+                            videoCard.className = 'bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer';
+                             // Corrected template literal syntax and placeholder URL
+                            videoCard.innerHTML = `
+                                <div class="relative h-48 bg-gray-200">
+                                     <img src="${video.thumbnailUrl || 'https://placehold.co/320x180?text=' + encodeURIComponent(video.title)}" alt="${video.title}" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-white" fill="currentColor" viewBox="0 0 16 16">
+                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
+                                        </svg>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="p-4">
-                                <h3 class="text-lg font-bold">${video.title}</h3>
-                            </div>
-                        `;
+                                <div class="p-4">
+                                    <h3 class="text-lg font-bold truncate" title="${video.title}">${video.title}</h3>
+                                </div>
+                            `;
 
-                        videoCard.addEventListener('click', () => {
-                            playVideo(video);
+                            videoCard.addEventListener('click', () => {
+                                playVideo(video);
+                            });
+                            elements.videosGrid.appendChild(videoCard);
                         });
-
-                        elements.videosGrid.appendChild(videoCard);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching videos:', error);
-                    elements.videosGrid.innerHTML = '<p class="text-red-500">Failed to load videos.</p>';
-                });
+                     } else if (!data) {
+                         // Error handled by fetchData
+                     } else {
+                         elements.videosGrid.innerHTML = `<p class="text-gray-500 col-span-full text-center">No videos found.</p>`;
+                     }
+                 });
         }
 
         function playVideo(video) {
@@ -431,113 +409,87 @@
             elements.videoPlayerContainer.classList.remove('hidden');
 
             elements.videoTitle.textContent = video.title;
-            elements.videoDescription.textContent = video.description;
+            elements.videoDescription.textContent = video.description || "No description available."; // Handle missing description
 
-            function getYoutubeId(url) {
-                const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#\&\?]*).*/;
-                const match = url.match(regExp);
-                return (match && match[2].length === 11) ? match[2] : null;
-            }
+            const videoEmbedCode = getYoutubeEmbedCode(video.videoUrl); // Use utility function
 
-            const youtubeId = getYoutubeId(video.videoUrl);
-            let videoEmbedCode = '';
-
-            if (youtubeId) {
-                videoEmbedCode = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${youtubeId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-            } else if (video.videoUrl.includes('embed')) {
-                videoEmbedCode = video.videoUrl;
+            if (videoEmbedCode) {
+                 elements.videoPlayer.innerHTML = videoEmbedCode;
             } else {
-                videoEmbedCode = `<p>Invalid YouTube URL</p>`;
+                 elements.videoPlayer.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-black text-red-500 p-4">Invalid YouTube URL or Embed Code provided.</div>`;
             }
-
-            elements.videoPlayer.innerHTML = `
-                <div class="aspect-w-16 aspect-h-9">
-                    ${videoEmbedCode}
-                </div>
-            `;
         }
+
+        // --- Admin UI Functions ---
 
         function loadAdminInterface() {
-            loadAdminCategories();
-            updateCategorySelect();
+             // Fetch fresh data for admin view
+             fetchData('getAdminData') // Assuming backend provides combined data for admin
+                 .then(data => {
+                     if (data) {
+                         DB.categories = data.categories || [];
+                         DB.videos = data.videos || []; // Cache videos if needed
+                         renderAdminCategories();
+                         updateCategorySelect();
+                     } else {
+                         // Handle error - fetchData should have displayed a message
+                     }
+                 });
         }
 
-        function loadAdminCategories() {
-            elements.adminCategoriesList.innerHTML = '';
 
-            fetch(`${API_URL}/categories`)
-                .then(response => response.json())
-                .then(data => {
-                    DB.categories = data;
-                    DB.categories.forEach(category => {
-                        const categoryChip = document.createElement('div');
-                        categoryChip.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center';
-                        categoryChip.innerHTML = `
-                            <span><span class="math-inline">\{category\.name\}</span\>
-<div class\="ml\-2 flex"\>
-<button class\="text\-blue\-500 hover\:text\-blue\-700 mr\-1 edit\-btn" data\-category\-id\="</span>{category.id}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                    </svg>
-                                </button>
-                                <button class="text-red-500 hover:text-red-700 delete-btn" data-category-id="${category.id}">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                        `;
-                        elements.adminCategoriesList.appendChild(categoryChip);
+        function renderAdminCategories() {
+            elements.adminCategoriesList.innerHTML = ''; // Clear existing
+             if (DB.categories.length === 0) {
+                 elements.adminCategoriesList.innerHTML = '<p class="text-gray-500 w-full">No categories yet.</p>';
+                 return;
+             }
 
-                        const editButton = categoryChip.querySelector('.edit-btn');
-                        editButton.addEventListener('click', (event) => {
-                            const categoryIdToEdit = event.currentTarget.dataset.categoryId;
-                            openEditCategoryModal(categoryIdToEdit);
-                        });
-
-                        const deleteButton = categoryChip.querySelector('.delete-btn');
-                        deleteButton.addEventListener('click', (event) => {
-                            const categoryIdToDelete = event.currentTarget.dataset.categoryId;
-                            if (confirm('Are you sure you want to delete this category?')) {
-                                deleteCategory(categoryIdToDelete);
-                            }
-                        });
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching admin categories:', error);
-                    elements.adminCategoriesList.innerHTML = '<p class="text-red-500">Failed to load categories.</p>';
-                });
-        }
-
-        function updateCategorySelect() {
-            elements.videoCategorySelect.innerHTML = '<option value="" disabled selected>Select Category</option>';
             DB.categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category.id;
-                option.textContent = category.name;
-                elements.videoCategorySelect.appendChild(option);
+                const categoryChip = document.createElement('div');
+                categoryChip.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full flex items-center text-sm';
+                 // Corrected SVGs and template literal
+                categoryChip.innerHTML = `
+                    <span class="mr-2">${category.name}</span>
+                    <button class="text-blue-500 hover:text-blue-700 mr-1 edit-btn p-1" data-category-id="${category.id}" title="Edit Category">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                         </svg>
+                     </button>
+                    <button class="text-red-500 hover:text-red-700 delete-btn p-1" data-category-id="${category.id}" title="Delete Category">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                         </svg>
+                    </button>
+                `;
+                elements.adminCategoriesList.appendChild(categoryChip);
+
+                // Add event listeners after appending
+                categoryChip.querySelector('.edit-btn').addEventListener('click', (event) => {
+                    const categoryIdToEdit = event.currentTarget.dataset.categoryId;
+                    openEditCategoryModal(categoryIdToEdit);
+                });
+
+                categoryChip.querySelector('.delete-btn').addEventListener('click', (event) => {
+                    const categoryIdToDelete = event.currentTarget.dataset.categoryId;
+                    // Added confirmation message in Sinhala
+                    if (confirm(`මෙම Category (${category.name}) එක මැකීමට අවශ්‍යද? (මෙයට අදාළ වීඩියෝ මැකෙන්නේ නැත)`)) {
+                        deleteCategory(categoryIdToDelete);
+                    }
+                });
             });
         }
 
-        function deleteCategory(categoryId) {
-            fetch(`${API_URL}/deleteCategory?id=${categoryId}`, {
-                method: 'DELETE'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    loadAdminCategories();
-                    updateCategorySelect();
-                    loadCategories(); // Refresh user categories if visible
-                } else {
-                    alert('Failed to delete category: ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting category:', error);
-                alert('Error deleting category.');
-            });
+         function updateCategorySelect() {
+             elements.videoCategorySelect.innerHTML = '<option value="" disabled selected>Select Category</option>';
+             if (DB.categories) {
+                 DB.categories.forEach(category => {
+                     const option = document.createElement('option');
+                     option.value = category.id;
+                     option.textContent = category.name;
+                     elements.videoCategorySelect.appendChild(option);
+                 });
+             }
         }
 
         function openEditCategoryModal(categoryId) {
@@ -546,13 +498,220 @@
                 currentEditingCategory = categoryId;
                 elements.editCategoryName.value = categoryToEdit.name;
                 elements.editCategoryThumbnail.value = categoryToEdit.thumbnailUrl || '';
-                elements.currentThumbnailPreview.src = categoryToEdit.thumbnailUrl || '/api/placeholder/100/50';
+                if (categoryToEdit.thumbnailUrl) {
+                     elements.editThumbnailPreview.src = categoryToEdit.thumbnailUrl;
+                     elements.editThumbnailPreview.classList.remove('hidden');
+                     elements.editNoThumbnailText.classList.add('hidden');
+                } else {
+                     elements.editThumbnailPreview.classList.add('hidden');
+                     elements.editNoThumbnailText.classList.remove('hidden');
+                }
                 elements.categoryEditModal.classList.remove('hidden');
+            } else {
+                 console.error("Category not found for editing:", categoryId);
+                 showMessage(elements.adminCategoryMessage, "Error: Category not found.", true);
             }
         }
 
-        // Initial load
-        loadCategories();
+        // --- Admin Action Functions ---
+
+         async function addCategory() {
+            const categoryName = elements.newCategoryInput.value.trim();
+            // Generate a simple ID (replace spaces, lowercase) - Backend might generate its own ID
+             const categoryId = categoryName.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now().toString().slice(-5);
+            const thumbnailUrl = elements.newCategoryThumbnail.value.trim(); // Optional
+
+            if (categoryName) {
+                const result = await postData('addCategory', { id: categoryId, name: categoryName, thumbnailUrl: thumbnailUrl });
+                 if (result.success) {
+                     elements.newCategoryInput.value = '';
+                     elements.newCategoryThumbnail.value = '';
+                     showMessage(elements.adminCategoryMessage, 'Category added successfully!', false);
+                     // Refresh admin view and dropdown
+                     loadAdminInterface(); // Reloads categories and updates select
+                 }
+                 // Error message handled by postData
+            } else {
+                 showMessage(elements.adminCategoryMessage, 'Please enter a category name.', true);
+            }
+        }
+
+         async function editCategory() {
+            if (!currentEditingCategory) return;
+
+            const newName = elements.editCategoryName.value.trim();
+            const newThumbnailUrl = elements.editCategoryThumbnail.value.trim();
+
+            if (!newName) {
+                 alert('Category name cannot be empty');
+                 return;
+            }
+
+             const result = await postData('editCategory', { id: currentEditingCategory, name: newName, thumbnailUrl: newThumbnailUrl });
+
+             if (result.success) {
+                 showMessage(elements.adminCategoryMessage, 'Category updated successfully!', false);
+                 elements.categoryEditModal.classList.add('hidden');
+                 currentEditingCategory = null;
+                 // Refresh admin view and dropdown
+                 loadAdminInterface();
+             }
+             // Error message handled by postData
+        }
+
+        async function deleteCategory(categoryId) {
+            const result = await postData('deleteCategory', { id: categoryId });
+             if (result.success) {
+                 showMessage(elements.adminCategoryMessage, 'Category deleted successfully!', false);
+                  // Refresh admin view and dropdown
+                 loadAdminInterface();
+             }
+             // Error message handled by postData
+        }
+
+        async function addVideo() {
+            const title = elements.videoTitleInput.value.trim();
+            const description = elements.videoDescriptionInput.value.trim();
+            const category = elements.videoCategorySelect.value;
+            const youtubeUrlOrCode = elements.youtubeUrlInput.value.trim();
+             let thumbnailUrl = elements.thumbnailUrlInput.value.trim();
+
+            if (!title || !category || !youtubeUrlOrCode) {
+                 showMessage(elements.adminVideoMessage,'Please fill Video Title, select Category, and provide YouTube URL/Code.', true);
+                 return;
+            }
+
+             // Attempt to extract a valid embed code or verify the input
+             const finalEmbedCode = getYoutubeEmbedCode(youtubeUrlOrCode); // Check/convert URL to embed code if possible
+
+             if (!finalEmbedCode) {
+                  showMessage(elements.adminVideoMessage, 'Invalid YouTube URL or Embed Code provided.', true);
+                  return;
+             }
+
+             // Simple ID generation (Backend might handle this better)
+             const videoId = 'vid-' + Date.now().toString().slice(-8);
+
+             // Basic Auto-Thumbnail attempt if URL was given and thumbnail field is empty
+             const youtubeIdForThumb = getYoutubeId(youtubeUrlOrCode);
+             if (!thumbnailUrl && youtubeIdForThumb) {
+                 thumbnailUrl = `https://img.youtube.com/vi/${youtubeIdForThumb}/mqdefault.jpg`; // Medium quality thumbnail
+             }
+
+
+             const result = await postData('addVideo', {
+                 id: videoId,
+                 title: title,
+                 description: description,
+                 category: category,
+                 videoUrl: youtubeUrlOrCode, // Store original input maybe? Or just the ID/Embed? Let's store original for now.
+                 thumbnailUrl: thumbnailUrl
+             });
+
+             if (result.success) {
+                 showMessage(elements.adminVideoMessage, 'Video added successfully!', false);
+                 // Clear form
+                 elements.videoTitleInput.value = '';
+                 elements.videoDescriptionInput.value = '';
+                 elements.youtubeUrlInput.value = '';
+                 elements.thumbnailUrlInput.value = '';
+                 elements.videoCategorySelect.selectedIndex = 0;
+                 // Optionally refresh video list if viewing the same category, but not critical
+             }
+             // Error message handled by postData
+        }
+
+        // --- Event Listeners ---
+        elements.adminLoginBtn.addEventListener('click', () => {
+            elements.adminCodeInput.value = ''; // Clear previous attempts
+            elements.adminLoginError.classList.add('hidden'); // Hide error
+            elements.adminLoginModal.classList.remove('hidden');
+            elements.adminCodeInput.focus();
+        });
+
+        elements.adminCancelBtn.addEventListener('click', () => {
+            elements.adminLoginModal.classList.add('hidden');
+        });
+
+        // Modified Admin Submit Logic
+        elements.adminSubmitBtn.addEventListener('click', () => {
+            const enteredCode = elements.adminCodeInput.value;
+            // !!! SECURITY RISK: Client-side check !!!
+            if (enteredCode === ADMIN_ACCESS_CODE) {
+                elements.adminLoginModal.classList.add('hidden');
+                elements.userInterface.classList.add('hidden');
+                elements.adminInterface.classList.remove('hidden');
+                loadAdminInterface(); // Load data for admin panel
+            } else {
+                elements.adminLoginError.classList.remove('hidden'); // Show error
+            }
+        });
+         // Allow login with Enter key
+         elements.adminCodeInput.addEventListener('keypress', (e) => {
+             if (e.key === 'Enter') {
+                 elements.adminSubmitBtn.click();
+             }
+         });
+
+        elements.adminLogoutBtn.addEventListener('click', () => {
+            elements.adminInterface.classList.add('hidden');
+            elements.userInterface.classList.remove('hidden');
+            // Reset user view to categories
+            elements.videosContainer.classList.add('hidden');
+            elements.videoPlayerContainer.classList.add('hidden');
+            elements.categoriesContainer.classList.remove('hidden');
+            loadCategories(); // Refresh categories view
+        });
+
+        elements.backToCategoriesBtn.addEventListener('click', () => {
+            elements.videosContainer.classList.add('hidden');
+            elements.categoriesContainer.classList.remove('hidden');
+        });
+
+        elements.backToVideosBtn.addEventListener('click', () => {
+            elements.videoPlayerContainer.classList.add('hidden');
+             // Need to know which category's videos to show
+            if (currentCategory.id) {
+                 elements.videosContainer.classList.remove('hidden');
+                 // Optionally reload videos for the currentCategory.id or assume DB.videos is still relevant
+            } else {
+                 // Fallback to categories if current category isn't known
+                 elements.videosContainer.classList.add('hidden');
+                 elements.categoriesContainer.classList.remove('hidden');
+            }
+             elements.videoPlayer.innerHTML = ''; // Stop video playback
+        });
+
+         elements.homeLink.addEventListener('click', (e) => {
+             e.preventDefault();
+             elements.adminInterface.classList.add('hidden'); // Hide admin if showing
+             elements.userInterface.classList.remove('hidden');
+             elements.videosContainer.classList.add('hidden');
+             elements.videoPlayerContainer.classList.add('hidden');
+             elements.categoriesContainer.classList.remove('hidden');
+             loadCategories(); // Load main categories view
+         });
+
+        // Admin Action Button Listeners
+        elements.addCategoryBtn.addEventListener('click', addCategory);
+        elements.uploadVideoBtn.addEventListener('click', addVideo);
+        elements.categoryEditSaveBtn.addEventListener('click', editCategory);
+
+        elements.categoryEditCancelBtn.addEventListener('click', () => {
+            elements.categoryEditModal.classList.add('hidden');
+            currentEditingCategory = null;
+        });
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+             // Check if API_URL is set
+             if (API_URL === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+                 elements.categoriesContainer.innerHTML = '<p class="text-red-500 font-bold col-span-full text-center p-4 border border-red-500 rounded">ERROR: API_URL is not set in the script. Please deploy the Google Apps Script and update the API_URL constant.</p>';
+                 return; // Stop further execution
+             }
+             loadCategories(); // Load initial category view for users
+        });
+
     </script>
 </body>
 </html>
